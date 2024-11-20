@@ -1,4 +1,4 @@
-package com.example.notele.components
+package com.example.notele.view
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -18,26 +18,21 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.notele.R
 import com.example.notele.db.model.NoteleModel
-import com.example.notele.ui.theme.NoteleTheme
 import com.example.notele.viewmodel.HomeViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ScreenHome(
-    vm : HomeViewModel = hiltViewModel(),
-    modifier: Modifier = Modifier
+    vm : HomeViewModel = hiltViewModel()
 ){
-
-    val stateVm = vm.stateTitle.collectAsState()
+    val stateVm = vm.state.value
 
     Scaffold(
         topBar = {
@@ -57,7 +52,9 @@ fun ScreenHome(
         Column(
             modifier = Modifier.padding(innerPadding)
         ) {
-            ListScreen(noteleList = vm.listNote)
+            ListScreen(
+                noteleList = stateVm.noteList
+            )
         }
     }
 
@@ -75,7 +72,9 @@ fun ListScreen(
         ),
         content = {
             items(noteleList) { index ->
-                    ItemScreen(index)
+                    ItemScreen(
+                        notele = index
+                    )
             }
         }
     )
@@ -83,7 +82,7 @@ fun ListScreen(
 
 @Composable
 fun ItemScreen(
-    item : NoteleModel
+    notele: NoteleModel
 ){
     Card(
         modifier = Modifier.fillMaxWidth(1f).padding(10.dp),
@@ -109,8 +108,8 @@ fun ItemScreen(
             modifier = Modifier.fillMaxWidth().padding(start = 8.dp, top = 12.dp, end = 8.dp, bottom = 12.dp)
 
         ) {
-            Text(text = item.title, fontSize = 24.sp, modifier = Modifier.padding(top = 5.dp))
-            Text(text = item.description,
+            Text(text = notele.title, fontSize = 24.sp, modifier = Modifier.padding(top = 5.dp))
+            Text(text = notele.description,
                 fontSize = 12.sp, modifier = Modifier.padding(top = 5.dp),
                 maxLines = 3
                 )
@@ -125,11 +124,4 @@ fun ItemScreen(
 }
 
 
-@Preview(showBackground = true)
-@Composable
-fun FullScreen() {
-    NoteleTheme {
-        //ScreenHome()
-    }
-}
 

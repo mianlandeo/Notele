@@ -1,35 +1,83 @@
 package com.example.notele.viewmodel
 
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.notele.db.model.NoteleModel
-import com.example.notele.repository.NoteleRepository
+import com.example.notele.usecases.NoteleEvent
+import com.example.notele.usecases.model.ModelUseCases
+import com.example.notele.usecases.model.NoteleOrder
+import com.example.notele.usecases.model.NoteleType
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val noteleRepository: NoteleRepository
+    private val useCases: ModelUseCases
 ): ViewModel(){
 
-    private val _stateTitle = MutableStateFlow("")
-    val stateTitle : StateFlow<String> = _stateTitle
+    /*Estado actual del usuario*/
+    private val _state = mutableStateOf(NoteleState())
+    val state : State<NoteleState> = _state
 
-    private val _stateDescription = MutableStateFlow("")
-    val stateDescription : StateFlow<String> = _stateDescription
+    //Variable que almacena el eliminado temporalmente
+    private var recentlyDeleteNotele : NoteleModel? = null
+    private var getNoteleJob : Job? = null
 
-    /*private val _listNote = MutableStateFlow<List<NoteleModel>>(emptyList())
-    val listNote: StateFlow<List<NoteleModel>> get() = _listNote*/
+    init {
+        //Iniciamos y obtenemos la fecha de creacion de cada nota
+        getListNote(NoteleOrder.Date(NoteleType.Descending))
+    }
 
-    val listNote: Flow<List<NoteleModel>> = noteleRepository.getAllNotes()
-
-    fun getListNotele(){
-        viewModelScope.launch {
-
+    fun getEvent(noteleEvent: NoteleEvent){
+        when(noteleEvent){
+            is NoteleEvent.Order -> {
+                if (state.value.noteOrder == noteleEvent.noteOrder
+                    && state.value.noteOrder.noteleType == noteleEvent.noteOrder.noteleType){
+                    return
+                }
+                getListNote(noteleEvent.noteOrder)
+            }
+            is NoteleEvent.Delete -> {
+                viewModelScope.launch {
+                    useCases.deleteNotele(noteleEvent.notele)
+                    recentlyDeleteNotele = noteleEvent.notele
+                }
+            }
+            is NoteleEvent.RestoreNote -> {
+                viewModelScope.launch {
+                    useCases.addNotele(recentlyDeleteNotele ?: return@launch)
+                }
+            }
+            is NoteleEvent.ToggleOrderSection -> {
+                _state.value = _state.value.copy(
+                    isOrderSectionVisible = !state.value.isOrderSectionVisible
+                )
+            }
         }
     }
+
+
+    private fun getListNote(noteleOrder: NoteleOrder){
+        getNoteleJob?.cancel()
+        getNoteleJob = useCases.getAllList(noteleOrder)
+            .onEach { notes -> //Almacena en cache
+                _state.value = _state.value.copy(
+                    noteList = notes,
+                    noteOrder = noteleOrder
+                )
+            }
+            .launchIn(viewModelScope)
+    }
+
 }
+data class NoteleState(
+    val noteList : List<NoteleModel> = emptyList(),
+    val noteOrder : NoteleOrder = NoteleOrder.Date(NoteleType.Descending), //Orden predeterminado de manera decendente
+    val isOrderSectionVisible: Boolean = false, //Orden de la visualizacion, iniciando como false
+)

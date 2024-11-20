@@ -9,7 +9,7 @@ class DeleteNotele @Inject constructor(
     private val repository: NoteleRepository
 ) {
 
-    suspend operator fun invoke(notele: NoteleModel){
+    operator fun invoke(notele: NoteleModel){
         repository.deleteNote(notele)
     }
 }

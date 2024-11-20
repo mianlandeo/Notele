@@ -12,10 +12,10 @@ import kotlinx.coroutines.flow.Flow
 interface NoteleDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertNotele(noteleModel: NoteleModel)
+    fun insertNotele(noteleModel: NoteleModel) // Registra nueva nota
 
     @Query("SELECT * FROM notele_table")
-    fun getAllList(): Flow<List<NoteleModel>>
+    fun getAllList(): Flow<List<NoteleModel>> //Obtenemos toda la lista de notas
 
     @Delete
     fun deleteNotele(notele: NoteleModel)

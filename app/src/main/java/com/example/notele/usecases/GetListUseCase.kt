@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class GetListUseCase @Inject constructor(
+class GetListUseCase(
     private val repository: NoteleRepository
 ) {
     operator fun invoke(
@@ -19,18 +19,16 @@ class GetListUseCase @Inject constructor(
                 /*Devuelve una lista de manera acendente*/
                  is NoteleType.Ascending -> {
                      when(order) {
-                         is NoteleOrder.Title -> valueList.sortedBy { it.title }
-                         is NoteleOrder.Description -> valueList.sortedBy { it.description }
+                         is NoteleOrder.Title -> valueList.sortedBy { it.title.lowercase() }
                          is NoteleOrder.Date -> valueList.sortedBy { it.date }
-                         is NoteleOrder.Priority -> valueList.sortedBy { it.priority }
+                         is NoteleOrder.ColorPriority -> valueList.sortedBy { it.priority }
                      }
                  }
                 is NoteleType.Descending -> {
                     when(order) {
                         is NoteleOrder.Title -> valueList.sortedByDescending { it.title }
-                        is NoteleOrder.Description -> valueList.sortedByDescending { it.description }
                         is NoteleOrder.Date -> valueList.sortedByDescending { it.date }
-                        is NoteleOrder.Priority -> valueList.sortedByDescending { it.priority }
+                        is NoteleOrder.ColorPriority -> valueList.sortedByDescending { it.priority }
                     }
                 }
             }

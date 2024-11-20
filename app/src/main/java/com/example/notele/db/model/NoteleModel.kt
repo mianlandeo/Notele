@@ -2,22 +2,26 @@ package com.example.notele.db.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.example.notele.ui.theme.DisabledPriority
-import com.example.notele.ui.theme.GreenPriority
-import com.example.notele.ui.theme.RedPriority
-import com.example.notele.ui.theme.YellowPriority
+import com.example.notele.ui.theme.BabyBlue
+import com.example.notele.ui.theme.LightGreen
+import com.example.notele.ui.theme.RedOrange
+import com.example.notele.ui.theme.RedPink
+import com.example.notele.ui.theme.Violet
 
 @Entity(tableName = "notele_table")
 data class NoteleModel (
 
-    @PrimaryKey val idNotele: Int,
+    @PrimaryKey val idNotele: Int? = null,
     val title: String,
     val description: String,
     val date: String,
-    val priority: String
+    val priority: String,
+    val color : Int
 ) {
     companion object {
-        val notelePriority = listOf(DisabledPriority, RedPriority,
-            YellowPriority, GreenPriority)
+        val notelePriority = listOf(RedOrange, RedPink,
+            BabyBlue, Violet, LightGreen)
     }
 }
+
+class MessageException(message: String) :Exception(message)

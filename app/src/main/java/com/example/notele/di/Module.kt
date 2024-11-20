@@ -5,6 +5,7 @@ import androidx.room.Room
 import com.example.notele.db.NoteleDataBase
 import com.example.notele.repository.NoteleRepository
 import com.example.notele.repository.NoteleRepositoryImpl
+import com.example.notele.usecases.AddNotele
 import com.example.notele.usecases.DeleteNotele
 import com.example.notele.usecases.GetListUseCase
 import com.example.notele.usecases.model.ModelUseCases
@@ -30,7 +31,7 @@ object Module {
 
     @Singleton
     @Provides
-    fun getRepository(noteleDataBase: NoteleDataBase): NoteleRepository{
+    fun getRepository(noteleDataBase: NoteleDataBase): NoteleRepository {
         return NoteleRepositoryImpl(noteleDataBase.getDao())
     }
 
@@ -38,8 +39,9 @@ object Module {
     @Provides
     fun getUsesCases(repository: NoteleRepository): ModelUseCases{
         return ModelUseCases(
-            getList = GetListUseCase(repository),
-            deleteNotele = DeleteNotele(repository)
+            getAllList = GetListUseCase(repository),
+            deleteNotele = DeleteNotele(repository),
+            addNotele = AddNotele(repository)
         )
     }
 
