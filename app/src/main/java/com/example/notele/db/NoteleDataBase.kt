@@ -5,7 +5,7 @@ import androidx.room.RoomDatabase
 import com.example.notele.db.dao.NoteleDao
 import com.example.notele.db.model.NoteleModel
 
-@Database(entities = [NoteleModel::class], version = 1)
+@Database(entities = [NoteleModel::class], version = 1, exportSchema = false)
 abstract class NoteleDataBase : RoomDatabase() {
 
     abstract fun getDao() : NoteleDao

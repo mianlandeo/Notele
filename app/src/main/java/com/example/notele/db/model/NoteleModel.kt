@@ -7,15 +7,17 @@ import com.example.notele.ui.theme.LightGreen
 import com.example.notele.ui.theme.RedOrange
 import com.example.notele.ui.theme.RedPink
 import com.example.notele.ui.theme.Violet
+import javax.annotation.processing.Generated
 
 @Entity(tableName = "notele_table")
-data class NoteleModel (
+data class NoteleModel(
 
-    @PrimaryKey val idNotele: Int? = null,
+    @PrimaryKey
+    @Generated
+    val idNotele: Int? = null,
     val title: String,
     val description: String,
-    val date: String,
-    val priority: String,
+    val time: Long,
     val color : Int
 ) {
     companion object {

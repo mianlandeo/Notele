@@ -1,4 +1,4 @@
-package com.example.notele.view.components
+package com.example.notele.views.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,7 +14,7 @@ import com.example.notele.usecases.model.NoteleType
 @Composable
 fun OrderSection(
     modifier: Modifier = Modifier,
-    selectOrder: NoteleOrder = NoteleOrder.Date(noteleType = NoteleType.Descending),
+    order: NoteleOrder = NoteleOrder.Date(noteleType = NoteleType.Descending),
     onChangeSelect: (NoteleOrder) -> Unit,
 ){
     Column(
@@ -23,35 +23,34 @@ fun OrderSection(
         Row (
             modifier = Modifier.fillMaxWidth()
         ) {
-
             RadioButtonComponent(
-                select = selectOrder is NoteleOrder.Title,
-                onSelect = {onChangeSelect(NoteleOrder.Title(noteleType = selectOrder.noteleType)) },
+                select = order is NoteleOrder.Title,
+                onSelect = {onChangeSelect(NoteleOrder.Title(noteleType = order.noteleType)) },
                 text = "Titulo"
             )
             RadioButtonComponent(
-                select = selectOrder is NoteleOrder.Date,
-                onSelect = {onChangeSelect(NoteleOrder.Date(noteleType = selectOrder.noteleType)) },
+                select = order is NoteleOrder.Date,
+                onSelect = {onChangeSelect(NoteleOrder.Date(noteleType = order.noteleType)) },
                 text = "Fecha"
             )
             RadioButtonComponent(
-                select = selectOrder is NoteleOrder.ColorPriority,
-                onSelect = {onChangeSelect(NoteleOrder.ColorPriority(noteleType = selectOrder.noteleType)) },
+                select = order is NoteleOrder.ColorPriority,
+                onSelect = {onChangeSelect(NoteleOrder.ColorPriority(noteleType = order.noteleType)) },
                 text = "Color"
             )
             Spacer(modifier = Modifier.height(6.dp))
             Row {
                 RadioButtonComponent(
-                    select = selectOrder.noteleType is NoteleType.Ascending,
-                    onSelect = {onChangeSelect(selectOrder.copy(
+                    select = order.noteleType is NoteleType.Ascending,
+                    onSelect = { onChangeSelect(order.copy(
                         NoteleType.Ascending
                     )) },
                     text = "Ascendente"
                 )
                 Spacer(modifier = Modifier.height(6.dp))
                 RadioButtonComponent(
-                    select = selectOrder.noteleType is NoteleType.Descending,
-                    onSelect = {onChangeSelect(selectOrder.copy(
+                    select = order.noteleType is NoteleType.Descending,
+                    onSelect = {onChangeSelect(order.copy(
                         NoteleType.Descending
                     )) },
                     text = "Descendente"

@@ -21,4 +21,8 @@ class NoteleRepositoryImpl @Inject constructor(
         noteleDao.deleteNotele(noteleModel)
     }
 
+    override fun getIdNotele(idNote: Int): NoteleModel? {
+        return noteleDao.getIdNote(idNote)
+    }
+
 }

@@ -1,4 +1,4 @@
-package com.example.notele.view.components
+package com.example.notele.views.components
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
@@ -34,7 +34,7 @@ import com.example.notele.util.Utils
 fun ItemScreen(
     modifier: Modifier = Modifier,
     notele: NoteleModel,
-    onDeleteClick : () -> Unit = {}
+    onDeleteClick : () -> Unit
 ){
     Box(
         modifier = modifier.testTag(Utils.NOTE_ITEM)
@@ -104,6 +104,6 @@ fun ItemScreen(
 @Composable
 fun ScreenResultHome() {
     MaterialTheme {
-        ItemScreen()
+        ItemScreen(notele = NoteleModel(0, "", "", "", "", 1))
     }
 }*/

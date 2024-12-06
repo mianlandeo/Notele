@@ -1,4 +1,4 @@
-package com.example.notele.view.components
+package com.example.notele.views.components
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer

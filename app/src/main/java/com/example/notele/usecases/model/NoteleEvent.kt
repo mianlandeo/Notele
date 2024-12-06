@@ -1,7 +1,6 @@
-package com.example.notele.usecases
+package com.example.notele.usecases.model
 
 import com.example.notele.db.model.NoteleModel
-import com.example.notele.usecases.model.NoteleOrder
 
 sealed class NoteleEvent {
     data class Order(val noteOrder: NoteleOrder): NoteleEvent()

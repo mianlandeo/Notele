@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface NoteleDao {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertNotele(noteleModel: NoteleModel) // Registra nueva nota
 
     @Query("SELECT * FROM notele_table")
@@ -19,5 +19,9 @@ interface NoteleDao {
 
     @Delete
     fun deleteNotele(notele: NoteleModel)
+
+    @Query("SELECT * FROM notele_table WHERE idNotele = :id")
+    fun getIdNote(id: Int): NoteleModel?
+
 
 }

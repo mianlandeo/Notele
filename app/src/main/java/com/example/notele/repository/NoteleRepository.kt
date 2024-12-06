@@ -11,4 +11,6 @@ interface NoteleRepository {
 
     fun deleteNote(noteleModel: NoteleModel)
 
+    fun getIdNotele(idNote : Int): NoteleModel?
+
 }

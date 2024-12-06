@@ -20,6 +20,7 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
     }
 
     buildTypes {
@@ -49,7 +50,9 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+
 }
+
 
 dependencies {
 
@@ -69,6 +72,10 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    //Material design m2
+    implementation(libs.androidx.material)
+    implementation(libs.material3)
+
     //Room
     implementation(libs.androidx.room.runtime)
     ksp(libs.androidx.room.compiler)
@@ -79,9 +86,11 @@ dependencies {
     ksp(libs.hilt.compiler)
     implementation(libs.androidx.hilt.navigation.fragment)
 
+
     //ViewModel
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.hilt.navigation.compose)
 
-
+    //Navigation compose
+    implementation(libs.androidx.navigation.compose)
 }

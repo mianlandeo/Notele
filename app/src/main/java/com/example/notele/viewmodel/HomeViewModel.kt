@@ -1,12 +1,14 @@
 package com.example.notele.viewmodel
 
+import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.notele.db.model.NoteleModel
-import com.example.notele.usecases.NoteleEvent
-import com.example.notele.usecases.model.ModelUseCases
+import com.example.notele.usecases.model.NoteleEvent
+import com.example.notele.usecases.model.ModelUsesCases
 import com.example.notele.usecases.model.NoteleOrder
 import com.example.notele.usecases.model.NoteleType
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,10 +20,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val useCases: ModelUseCases
+    private val useCases: ModelUsesCases
 ): ViewModel(){
 
-    /*Estado actual del usuario*/
+    /*Estado actual de la lista*/
     private val _state = mutableStateOf(NoteleState())
     val state : State<NoteleState> = _state
 
@@ -32,6 +34,7 @@ class HomeViewModel @Inject constructor(
     init {
         //Iniciamos y obtenemos la fecha de creacion de cada nota
         getListNote(NoteleOrder.Date(NoteleType.Descending))
+        Log.e("estado", "${state.value}")
     }
 
     fun getEvent(noteleEvent: NoteleEvent){

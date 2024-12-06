@@ -6,7 +6,6 @@ import com.example.notele.usecases.model.NoteleOrder
 import com.example.notele.usecases.model.NoteleType
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import javax.inject.Inject
 
 class GetListUseCase(
     private val repository: NoteleRepository
@@ -20,15 +19,15 @@ class GetListUseCase(
                  is NoteleType.Ascending -> {
                      when(order) {
                          is NoteleOrder.Title -> valueList.sortedBy { it.title.lowercase() }
-                         is NoteleOrder.Date -> valueList.sortedBy { it.date }
-                         is NoteleOrder.ColorPriority -> valueList.sortedBy { it.priority }
+                         is NoteleOrder.Date -> valueList.sortedBy { it.time }
+                         is NoteleOrder.ColorPriority -> valueList.sortedBy { it.color }
                      }
                  }
                 is NoteleType.Descending -> {
                     when(order) {
                         is NoteleOrder.Title -> valueList.sortedByDescending { it.title }
-                        is NoteleOrder.Date -> valueList.sortedByDescending { it.date }
-                        is NoteleOrder.ColorPriority -> valueList.sortedByDescending { it.priority }
+                        is NoteleOrder.Date -> valueList.sortedByDescending { it.time }
+                        is NoteleOrder.ColorPriority -> valueList.sortedByDescending { it.color }
                     }
                 }
             }
