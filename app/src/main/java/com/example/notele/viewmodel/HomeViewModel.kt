@@ -3,7 +3,6 @@ package com.example.notele.viewmodel
 import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.notele.db.model.NoteleModel
@@ -21,7 +20,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val useCases: ModelUsesCases
-): ViewModel(){
+): ViewModel() {
 
     /*Estado actual de la lista*/
     private val _state = mutableStateOf(NoteleState())
@@ -65,7 +64,6 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-
     private fun getListNote(noteleOrder: NoteleOrder){
         getNoteleJob?.cancel()
         getNoteleJob = useCases.getAllList(noteleOrder)
@@ -76,9 +74,10 @@ class HomeViewModel @Inject constructor(
                 )
             }
             .launchIn(viewModelScope)
-    }
 
+    }
 }
+
 data class NoteleState(
     val noteList : List<NoteleModel> = emptyList(),
     val noteOrder : NoteleOrder = NoteleOrder.Date(NoteleType.Descending), //Orden predeterminado de manera decendente
