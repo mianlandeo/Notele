@@ -12,6 +12,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
 @Composable
 fun EditTextVisible(
@@ -22,12 +23,11 @@ fun EditTextVisible(
     onValueText: (String) -> Unit,
     textStyle: TextStyle = TextStyle(),
     singleLine: Boolean,
-    hintVisible: Boolean = true,
-    modifier: Modifier = Modifier
+    hintVisible: Boolean = true
 ){
 
     Box(
-        modifier = modifier
+        modifier = Modifier
     ) {
         BasicTextField(
             value = text,
@@ -45,7 +45,9 @@ fun EditTextVisible(
             Text(
                 text = hint,
                 style = textStyle,
-                color = Color.DarkGray
+                color = Color.DarkGray,
+                modifier = Modifier.padding(8.dp),
+                fontSize = 15.sp
             )
         }
     }

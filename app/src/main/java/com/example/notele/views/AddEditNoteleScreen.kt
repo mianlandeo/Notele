@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -18,10 +19,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
-import androidx.compose.material.Scaffold
+import androidx.compose.material3.Scaffold
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Done
 import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -32,23 +34,28 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.notele.R
 import com.example.notele.db.model.NoteleModel
 import com.example.notele.util.Utils
 import com.example.notele.viewmodel.AddEditNotelesEvent
 import com.example.notele.viewmodel.AddEditViewModel
 import com.example.notele.views.components.EditTextVisible
+import com.example.notele.views.components.NavigationTopBar
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddEditScreen(
     modifier: Modifier = Modifier,
     vm: AddEditViewModel = hiltViewModel(),
     noteColor: Int,
-    navController: NavController
+    navController: NavController,
+    callNavigateBack: Boolean = true,
 ){
 
     val title = vm.editTitle.value
@@ -73,21 +80,27 @@ fun AddEditScreen(
                     )
                 }
                 is AddEditViewModel.UiEvent.SaveNotele -> {
-                    //Agregar guardado Ui
                     navController.navigateUp()
                 }
             }
         }
     }
 
-    Scaffold(
+    Scaffold (
         modifier = Modifier,
+        topBar = {
+            NavigationTopBar(
+                title = stringResource(R.string.add_note),
+                navigateUp = { navController.navigateUp() },
+                callNavigateBack = callNavigateBack
+            )
+        },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = {},
+                onClick = { vm.onEvent(AddEditNotelesEvent.OnSaveItem) },
                 backgroundColor = Color.Black
             ) {
-                Icon(Icons.Rounded.Done, "Save")
+                Icon(Icons.Rounded.Done, "Save", tint = Color.White)
             }
         }
     ) { innerPadding ->

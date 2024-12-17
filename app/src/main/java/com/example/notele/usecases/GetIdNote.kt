@@ -7,7 +7,7 @@ class GetIdNote (
     private val repository: NoteleRepository
 ) {
 
-    suspend operator fun invoke(idNotele: Int): NoteleModel?{
+    operator fun invoke(idNotele: Int): NoteleModel?{
         return repository.getIdNotele(idNotele)
     }
 }

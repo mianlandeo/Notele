@@ -49,6 +49,7 @@ class HomeViewModel @Inject constructor(
                 viewModelScope.launch {
                     useCases.deleteNotele(noteleEvent.notele)
                     recentlyDeleteNotele = noteleEvent.notele
+                    //Log.e("Eliminado:", "$recentlyDeleteNotele")
                 }
             }
             is NoteleEvent.RestoreNote -> {

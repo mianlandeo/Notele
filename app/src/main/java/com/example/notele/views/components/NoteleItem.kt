@@ -69,11 +69,11 @@ fun ItemScreen(
         }
         Column(
             modifier = Modifier.fillMaxSize()
-                .padding(16.dp, end = 32.dp)
+                .padding(20.dp, end = 32.dp)
         ) {
             Text(
                 text = notele.title,
-                style = MaterialTheme.typography.titleSmall,
+                style = MaterialTheme.typography.titleLarge,
                 color = MaterialTheme.colorScheme.onSurface,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
@@ -81,7 +81,7 @@ fun ItemScreen(
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = notele.description,
-                style = MaterialTheme.typography.bodySmall,
+                style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurface,
                 maxLines = 10,
                 overflow = TextOverflow.Ellipsis
@@ -98,6 +98,7 @@ fun ItemScreen(
             )
         }
     }
+    Spacer(modifier = Modifier.height(8.dp))
 }
 
 /*@Preview(showSystemUi = true, showBackground = true)

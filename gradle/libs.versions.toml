@@ -1,10 +1,10 @@
 [versions]
 agp = "8.6.0"
-hiltAndroid = "2.44"
+hiltAndroid = "2.49"
 hiltNavigationFragment = "1.2.0"
 
-kotlin = "1.9.25"
-ksp = "1.9.25-1.0.20"
+kotlin = "2.0.20"
+ksp = "2.0.20-1.0.25"
 
 coreKtx = "1.10.1"
 junit = "4.13.2"
@@ -51,5 +51,6 @@ material3 = { module = "androidx.compose.material3:material3", version.ref = "ma
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 android-ksp = {id = "com.google.devtools.ksp", version.ref = "ksp"}
 android-hilt = {id = "com.google.dagger.hilt.android", version.ref = "hiltAndroid"}

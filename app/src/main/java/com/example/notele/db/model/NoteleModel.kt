@@ -13,7 +13,6 @@ import javax.annotation.processing.Generated
 data class NoteleModel(
 
     @PrimaryKey
-    @Generated
     val idNotele: Int? = null,
     val title: String,
     val description: String,

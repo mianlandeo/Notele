@@ -1,5 +1,6 @@
 package com.example.notele.views
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -16,27 +17,29 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.FloatingActionButtonDefaults
+import androidx.compose.material.SnackbarResult
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.rememberScaffoldState
-import androidx.compose.material.Scaffold
-import androidx.compose.material.SnackbarDuration
-import androidx.compose.material.SnackbarResult
 import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.notele.db.model.NoteleModel
 import com.example.notele.usecases.model.NoteleEvent
 import com.example.notele.util.Utils
 import com.example.notele.views.components.ItemScreen
@@ -47,101 +50,130 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun ScreenHome(
-    vm : HomeViewModel = hiltViewModel(),
+    vm: HomeViewModel = hiltViewModel(),
     navController: NavController
-){
+) {
     val stateVm = vm.state.value
     //Barra bocadillo + alcance de corrutina
-    val scaffoldState = rememberScaffoldState()
+    val snackBarHostState = rememberScaffoldState()
     val rememberScope = rememberCoroutineScope()
+    //val snackBarHostState = remember { SnackbarHostState() }
 
-    Scaffold (
+
+    Scaffold(
         floatingActionButton = {
-            FloatingActionButton(
+            androidx.compose.material3.FloatingActionButton(
                 /*Navegamos a un nuevo AddScreen*/
                 onClick = { navController.navigate(DestinationScreen.AddScreen.value) },
-                backgroundColor = MaterialTheme.colorScheme.primary,
-                elevation = FloatingActionButtonDefaults.elevation(12.dp)
-        ) {
-                Icon(imageVector = Icons.Filled.Add, contentDescription = "Add..")
+                containerColor = MaterialTheme.colorScheme.primary,
+                elevation = androidx.compose.material3.FloatingActionButtonDefaults.elevation(12.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = "Add",
+                    tint = Color.Black
+                )
             }
-        },
-            scaffoldState = scaffoldState
+        }
     ) { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            Row (
-                modifier = Modifier.fillMaxWidth(),
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 5.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ){
+                verticalAlignment = Alignment.Top
+            ) {
                 Text(
                     text = "Titulo",
-                    style = MaterialTheme.typography.headlineLarge
+                    style = MaterialTheme.typography.bodyLarge,
+                    modifier = Modifier.padding(start = 12.dp),
+                    fontSize = 40.sp,
+                    fontWeight = FontWeight.Bold
                 )
                 IconButton(
-                        onClick = {}
+                    onClick = {
+                        vm.getEvent(NoteleEvent.ToggleOrderSection)
+                    }
                 ) {
                     Icon(
-                        imageVector = Icons.Default.KeyboardArrowDown /*Icons.AutoMirrored.Filled.List*/,
-                        contentDescription = "Down"
+                        imageVector = Icons.Default.KeyboardArrowDown,
+                        contentDescription = "Down",
                     )
                 }
-                AnimatedVisibility(
-                    visible = stateVm.isOrderSectionVisible,
-                    enter = fadeIn() + slideInVertically(),
-                    exit = fadeOut() + slideOutVertically()
-                ) {
-                    OrderSection(
+            }
+            AnimatedVisibility(
+                visible = stateVm.isOrderSectionVisible,
+                enter = fadeIn() + slideInVertically(),
+                exit = fadeOut() + slideOutVertically()
+            ) {
+                OrderSection(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp)
+                        .testTag(Utils.TEST_TAG_TITLE),
+                    order = stateVm.noteOrder, //recompone la vista segun el orden seleccionado por el usuario
+                    onChangeSelect = { onChangeItemNotele ->
+                        /* */
+                        vm.getEvent(NoteleEvent.Order(onChangeItemNotele))
+                    }
+                )
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+            LazyColumn(modifier = Modifier
+                .fillMaxSize()
+                .padding(12.dp)) {
+                items(items = stateVm.noteList) { item ->
+                    ItemScreen(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp)
-                            .testTag(Utils.TEST_TAG_TITLE),
-                        order = stateVm.noteOrder, //recompone la vista segun el orden seleccionado por el usuario
-                        onChangeSelect = { onChangeItemNotele ->
-                            /* */
-                            vm.getEvent(NoteleEvent.Order(onChangeItemNotele))
+                            .fillMaxSize()
+                            .clickable {
+                                /*Navegamos a una nota ya creada*/
+                                navController.navigate(
+                                    DestinationScreen.AddScreen.value +
+                                            "?noteId=${item.idNotele}&noteColor=${item.color}"
+                                )
+                            },
+                        notele = item,
+                        onDeleteClick = {
+                            //Cada ves que se elimine una nota aparecera un snackBar
+                            //Donde podemos recuperar la nota eliminada por error
+                            //la clase de dato Delete almacena en su parameto el tipo de nota
+                            //Que se elimino hace poco
+                            //NoteleEvent -> Delete(notele: noteleModel)
+                            vm.getEvent(NoteleEvent.Delete(item))
+                            rememberScope.launch {
+                                val resultSnackBar = snackBarHostState.snackbarHostState.showSnackbar(
+                                    "Deseas recuperar? :",
+                                    "Deshacer"
+                                )
+                                if (resultSnackBar == SnackbarResult.ActionPerformed) {
+                                    vm.getEvent(NoteleEvent.RestoreNote)
+                                }
+                                Log.e("Borrador", "$resultSnackBar")
+                            }
                         }
                     )
+                    Spacer(modifier = Modifier.height(12.dp))
                 }
-                Spacer(modifier = Modifier.height(16.dp))
-                LazyColumn (modifier = Modifier.fillMaxSize()){
-                    items (stateVm.noteList) {item ->
-                        ItemScreen(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .clickable {
-                                    /*Navegamos a una nota ya creada*/
-                                    navController.navigate(
-                                        DestinationScreen.AddScreen.value+
-                                        "?idnote=${item.idNotele}&notecolor=${item.color}"
-                                    )
-                                },
-                            notele = item,
-                            onDeleteClick = {
-                                //Cada ves que se elimine una nota aparecera un snackBar
-                                //Donde podemos recuperar la nota eliminada por error
-                                //la clase de dato Delete almacena en su parameto el tipo de nota
-                                //Que se elimino hace poco
-                                //NoteleEvent -> Delete(notele: noteleModel)
-                                vm.getEvent(NoteleEvent.Delete(item))
-                                rememberScope.launch{
-                                    val resultSnackBar = scaffoldState.snackbarHostState.showSnackbar("Deseas recuperar? :",
-                                        "Deshacer", SnackbarDuration.Short)
-                                    if (resultSnackBar == SnackbarResult.ActionPerformed) {
-                                        vm.getEvent(NoteleEvent.RestoreNote)
-                                    }
-                                }
-                            }
-                        )
-                    }
-                }
-                Spacer(modifier = Modifier.height(12.dp))
             }
         }
+    }
+}
+
+@Composable
+fun ListNotele(
+        item : NoteleModel,
+        onChangeList: List<NoteleModel>
+){
+    Column(
+        modifier = Modifier
+    ) {
+
     }
 }
 

@@ -1,5 +1,6 @@
 package com.example.notele.viewmodel
 
+import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -10,6 +11,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.notele.db.model.NoteleModel
 import com.example.notele.usecases.model.ModelUsesCases
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
@@ -41,10 +43,10 @@ class AddEditViewModel @Inject constructor(
     private var currendId : Int? = null
 
     init {
-        //Guardamos la nota almacenada
+
         savedStateHandle.get<Int>("noteleId")?.let { id ->
             if (id != -1){
-                viewModelScope.launch {
+                viewModelScope.launch(Dispatchers.IO) {
                     usesCases.getIdNote(id)?.also { notele ->
                         currendId = notele.idNotele
                         _editTitle.value = editTitle.value.copy(
@@ -75,7 +77,7 @@ class AddEditViewModel @Inject constructor(
             }
             is AddEditNotelesEvent.DescriptionChange -> {
                 _editDescription.value = editDescription.value.copy(
-                    isHintVisible = event.valueChange.isFocused && _editDescription.value.text.isEmpty()
+                    isHintVisible = event.valueChange.isFocused != _editDescription.value.text.isBlank()
                 )
             }
             is AddEditNotelesEvent.Title -> {
@@ -85,7 +87,7 @@ class AddEditViewModel @Inject constructor(
             }
             is AddEditNotelesEvent.TitleChange -> {
                 _editTitle.value = editTitle.value.copy(
-                    isHintVisible = event.valueChange.isFocused && _editTitle.value.text.isEmpty()
+                    isHintVisible = event.valueChange.isFocused != _editTitle.value.text.isBlank()
                 )
             }
             is AddEditNotelesEvent.OnSaveItem -> {
@@ -100,6 +102,7 @@ class AddEditViewModel @Inject constructor(
                                 idNotele = currendId
                             )
                         )
+                        Log.e("Item: ", "${currendId}")
                         _stateEvent.emit(UiEvent.SaveNotele)
                     }catch (e: Exception){
                         _stateEvent.emit(UiEvent.ShowSnackBar(

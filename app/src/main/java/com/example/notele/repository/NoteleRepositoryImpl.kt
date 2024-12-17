@@ -2,7 +2,9 @@ package com.example.notele.repository
 
 import com.example.notele.db.dao.NoteleDao
 import com.example.notele.db.model.NoteleModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class NoteleRepositoryImpl @Inject constructor(
@@ -14,7 +16,7 @@ class NoteleRepositoryImpl @Inject constructor(
     }
 
     override fun insertNote(noteleModel: NoteleModel) {
-        noteleDao.insertNotele(noteleModel)
+            noteleDao.insertNotele(noteleModel)
     }
 
     override fun deleteNote(noteleModel: NoteleModel) {

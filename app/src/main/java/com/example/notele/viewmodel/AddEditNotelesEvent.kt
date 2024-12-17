@@ -9,6 +9,6 @@ sealed class AddEditNotelesEvent {
     data class Description(val value: String): AddEditNotelesEvent()
     data class DescriptionChange(val valueChange: FocusState): AddEditNotelesEvent()
     data class Color(val value : Int): AddEditNotelesEvent()
-    data object OnSaveItem: AddEditNotelesEvent()
+    object OnSaveItem: AddEditNotelesEvent()
 
 }

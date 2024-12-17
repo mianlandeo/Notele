@@ -32,16 +32,16 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun NavigationScreen(
-    modifier: Modifier = Modifier
+
 ) {
     NoteleAppTheme {
         val navController= rememberNavController()
 
         Surface {
             NavHost(
-                navController, DestinationScreen.HomeScreen.value
+                navController, DestinationScreen.ScreenHome.value
             ){
-                composable(route = DestinationScreen.HomeScreen.value) {
+                composable(route = DestinationScreen.ScreenHome.value) {
                     ScreenHome(
                         navController = navController
                     )

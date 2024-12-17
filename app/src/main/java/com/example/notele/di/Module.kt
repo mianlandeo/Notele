@@ -1,5 +1,6 @@
 package com.example.notele.di
 
+import android.app.Application
 import android.content.Context
 import androidx.room.Room
 import com.example.notele.db.NoteleDataBase
@@ -23,12 +24,13 @@ object Module {
 
     @Singleton
     @Provides
-    fun bdRoomModule(context: Context): NoteleDataBase {
+    fun bdRoomModule(app: Application): NoteleDataBase {
         return Room.databaseBuilder(
-            context, NoteleDataBase::class.java, "notele_table")
+            app.applicationContext, NoteleDataBase::class.java, "notele_db")
             .fallbackToDestructiveMigration()
-
+            .allowMainThreadQueries()
             .build()
+
     }
 
     @Singleton
@@ -36,6 +38,7 @@ object Module {
     fun getRepository(noteleDataBase: NoteleDataBase): NoteleRepository {
         return NoteleRepositoryImpl(noteleDataBase.getDao())
     }
+
 
     @Singleton
     @Provides

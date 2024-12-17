@@ -1,5 +1,6 @@
 package com.example.notele.usecases
 
+import android.util.Log
 import com.example.notele.db.model.NoteleModel
 import com.example.notele.repository.NoteleRepository
 import com.example.notele.usecases.model.NoteleOrder
@@ -15,7 +16,7 @@ class GetListUseCase(
     ) : Flow<List<NoteleModel>>{
         return repository.getAllNotes().map { valueList ->
             when(order.noteleType) {
-                /*Devuelve una lista de manera acendente*/
+                /*Devuelve una lista de la data en orden ascendente o decendente*/
                  is NoteleType.Ascending -> {
                      when(order) {
                          is NoteleOrder.Title -> valueList.sortedBy { it.title.lowercase() }
