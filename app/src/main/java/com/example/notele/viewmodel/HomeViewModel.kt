@@ -31,7 +31,7 @@ class HomeViewModel @Inject constructor(
     private var getNoteleJob : Job? = null
 
     init {
-        //Iniciamos y obtenemos la fecha de creacion de cada nota
+        //Inicializamos la lista en fecha descendente por defecto
         getListNote(NoteleOrder.Date(NoteleType.Descending))
         Log.e("estado", "${state.value}")
     }
@@ -49,7 +49,7 @@ class HomeViewModel @Inject constructor(
                 viewModelScope.launch {
                     useCases.deleteNotele(noteleEvent.notele)
                     recentlyDeleteNotele = noteleEvent.notele
-                    //Log.e("Eliminado:", "$recentlyDeleteNotele")
+                    Log.e("Eliminado:", "$recentlyDeleteNotele")
                 }
             }
             is NoteleEvent.RestoreNote -> {
@@ -73,14 +73,12 @@ class HomeViewModel @Inject constructor(
                     noteList = notes,
                     noteOrder = noteleOrder
                 )
-            }
-            .launchIn(viewModelScope)
-
+            }.launchIn(viewModelScope)
     }
 }
 
 data class NoteleState(
     val noteList : List<NoteleModel> = emptyList(),
-    val noteOrder : NoteleOrder = NoteleOrder.Date(NoteleType.Descending), //Orden predeterminado de manera decendente
+    val noteOrder : NoteleOrder = NoteleOrder.Date(NoteleType.Descending), //Orden predeterminado -> Fecha-descendente
     val isOrderSectionVisible: Boolean = false, //Orden de la visualizacion, iniciando como false
 )

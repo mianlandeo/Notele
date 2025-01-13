@@ -1,5 +1,6 @@
 package com.example.notele.views
 
+import android.util.Log
 import androidx.compose.animation.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -69,9 +70,7 @@ fun AddEditScreen(
         )
     }
 
-    LaunchedEffect(
-        key1 = true
-    ) {
+    LaunchedEffect(true) {
         vm.stateEvent.collectLatest { event ->
             when(event) {
                 is AddEditViewModel.UiEvent.ShowSnackBar -> {
@@ -97,7 +96,7 @@ fun AddEditScreen(
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { vm.onEvent(AddEditNotelesEvent.OnSaveItem) },
+                onClick = { vm.onEvent(AddEditNotelesEvent.OnSaveItem)},
                 backgroundColor = Color.Black
             ) {
                 Icon(Icons.Rounded.Done, "Save", tint = Color.White)

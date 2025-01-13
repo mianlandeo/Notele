@@ -47,10 +47,10 @@ fun NavigationScreen(
                     )
                 }
                 composable(route = DestinationScreen.AddScreen.value +
-                    "?noteId={noteId}&noteColor={noteColor}",
+                    "?idNotele={idNotele}&noteColor={noteColor}",
                     arguments = listOf(
                         navArgument(
-                            name = "noteId"
+                            name = "idNotele"
                         ) {
                             type = NavType.IntType
                             defaultValue = -1

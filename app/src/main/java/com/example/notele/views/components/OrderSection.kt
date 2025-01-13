@@ -15,7 +15,7 @@ import com.example.notele.usecases.model.NoteleType
 @Composable
 fun OrderSection(
     modifier: Modifier = Modifier,
-    order: NoteleOrder = NoteleOrder.Date(noteleType = NoteleType.Descending),
+    order: NoteleOrder = NoteleOrder.Title(noteleType = NoteleType.Descending),
     onChangeSelect: (NoteleOrder) -> Unit
 ){
     Column(

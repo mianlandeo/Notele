@@ -100,11 +100,3 @@ fun ItemScreen(
     }
     Spacer(modifier = Modifier.height(8.dp))
 }
-
-/*@Preview(showSystemUi = true, showBackground = true)
-@Composable
-fun ScreenResultHome() {
-    MaterialTheme {
-        ItemScreen(notele = NoteleModel(0, "", "", "", "", 1))
-    }
-}*/

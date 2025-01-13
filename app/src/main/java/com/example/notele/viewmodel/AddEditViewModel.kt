@@ -1,6 +1,7 @@
 package com.example.notele.viewmodel
 
 import android.util.Log
+import androidx.compose.runtime.MutableIntState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -13,6 +14,7 @@ import com.example.notele.usecases.model.ModelUsesCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -43,11 +45,10 @@ class AddEditViewModel @Inject constructor(
     private var currendId : Int? = null
 
     init {
-
-        savedStateHandle.get<Int>("noteleId")?.let { id ->
-            if (id != -1){
+        savedStateHandle.get<Int>("idNotele")?.let { noteleId ->
+            if (noteleId != -1) {
                 viewModelScope.launch(Dispatchers.IO) {
-                    usesCases.getIdNote(id)?.also { notele ->
+                    usesCases.getIdNote(noteleId)?.also { notele ->
                         currendId = notele.idNotele
                         _editTitle.value = editTitle.value.copy(
                             text = notele.title,
@@ -64,7 +65,7 @@ class AddEditViewModel @Inject constructor(
         }
     }
 
-    /*Recompone los componente*/
+    /*Recompone los componente segun lo seleccionado por el usuario su estado cambia*/
     fun onEvent(event : AddEditNotelesEvent){
         when(event) {
             is AddEditNotelesEvent.Color -> {
@@ -77,7 +78,7 @@ class AddEditViewModel @Inject constructor(
             }
             is AddEditNotelesEvent.DescriptionChange -> {
                 _editDescription.value = editDescription.value.copy(
-                    isHintVisible = event.valueChange.isFocused != _editDescription.value.text.isBlank()
+                    isHintVisible = !event.valueChange.isFocused != _editDescription.value.text.isBlank()
                 )
             }
             is AddEditNotelesEvent.Title -> {
@@ -87,7 +88,7 @@ class AddEditViewModel @Inject constructor(
             }
             is AddEditNotelesEvent.TitleChange -> {
                 _editTitle.value = editTitle.value.copy(
-                    isHintVisible = event.valueChange.isFocused != _editTitle.value.text.isBlank()
+                    isHintVisible = !event.valueChange.isFocused != _editTitle.value.text.isBlank()
                 )
             }
             is AddEditNotelesEvent.OnSaveItem -> {
@@ -102,7 +103,7 @@ class AddEditViewModel @Inject constructor(
                                 idNotele = currendId
                             )
                         )
-                        Log.e("Item: ", "${currendId}")
+                        Log.e("currendID:", "$currendId")
                         _stateEvent.emit(UiEvent.SaveNotele)
                     }catch (e: Exception){
                         _stateEvent.emit(UiEvent.ShowSnackBar(

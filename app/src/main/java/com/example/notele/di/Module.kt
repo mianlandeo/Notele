@@ -1,6 +1,5 @@
 package com.example.notele.di
 
-import android.app.Application
 import android.content.Context
 import androidx.room.Room
 import com.example.notele.db.NoteleDataBase
@@ -14,9 +13,9 @@ import com.example.notele.usecases.model.ModelUsesCases
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
-
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -24,13 +23,12 @@ object Module {
 
     @Singleton
     @Provides
-    fun bdRoomModule(app: Application): NoteleDataBase {
+    fun bdRoomModule(@ApplicationContext context: Context): NoteleDataBase {
         return Room.databaseBuilder(
-            app.applicationContext, NoteleDataBase::class.java, "notele_db")
-            .fallbackToDestructiveMigration()
+            context.applicationContext, NoteleDataBase::class.java, "notele_db")
             .allowMainThreadQueries()
+            .fallbackToDestructiveMigration()
             .build()
-
     }
 
     @Singleton

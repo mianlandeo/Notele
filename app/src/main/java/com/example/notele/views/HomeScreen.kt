@@ -17,18 +17,19 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.SnackbarResult
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -39,7 +40,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.notele.db.model.NoteleModel
 import com.example.notele.usecases.model.NoteleEvent
 import com.example.notele.util.Utils
 import com.example.notele.views.components.ItemScreen
@@ -47,6 +47,7 @@ import com.example.notele.views.components.OrderSection
 import com.example.notele.viewmodel.HomeViewModel
 import com.example.notele.views.navigation.DestinationScreen
 import kotlinx.coroutines.launch
+import androidx.compose.material3.SnackbarResult.ActionPerformed
 
 @Composable
 fun ScreenHome(
@@ -55,9 +56,10 @@ fun ScreenHome(
 ) {
     val stateVm = vm.state.value
     //Barra bocadillo + alcance de corrutina
-    val snackBarHostState = rememberScaffoldState()
+    //val snackBarHostState = rememberScaffoldState()
     val rememberScope = rememberCoroutineScope()
-    //val snackBarHostState = remember { SnackbarHostState() }
+    val snackBarHostState = remember { SnackbarHostState() }
+
 
 
     Scaffold(
@@ -74,7 +76,8 @@ fun ScreenHome(
                     tint = Color.Black
                 )
             }
-        }
+        },
+        snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -116,9 +119,9 @@ fun ScreenHome(
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp)
                         .testTag(Utils.TEST_TAG_TITLE),
-                    order = stateVm.noteOrder, //recompone la vista segun el orden seleccionado por el usuario
+                    order = stateVm.noteOrder, /*recompone la vista segun el orden seleccionado por el usuario*/
                     onChangeSelect = { onChangeItemNotele ->
-                        /* */
+                        /*Inicializa la seleccion con titulo en descendente mediante */
                         vm.getEvent(NoteleEvent.Order(onChangeItemNotele))
                     }
                 )
@@ -135,26 +138,24 @@ fun ScreenHome(
                                 /*Navegamos a una nota ya creada*/
                                 navController.navigate(
                                     DestinationScreen.AddScreen.value +
-                                            "?noteId=${item.idNotele}&noteColor=${item.color}"
+                                            "?idNotele=${item.idNotele}&noteColor=${item.color}"
                                 )
                             },
                         notele = item,
                         onDeleteClick = {
-                            //Cada ves que se elimine una nota aparecera un snackBar
-                            //Donde podemos recuperar la nota eliminada por error
-                            //la clase de dato Delete almacena en su parameto el tipo de nota
-                            //Que se elimino hace poco
-                            //NoteleEvent -> Delete(notele: noteleModel)
-                            vm.getEvent(NoteleEvent.Delete(item))
+                            // Cada ves que se elimine una nota aparecera un snackBar
+                            // Donde podemos recuperar la nota eliminada
+                            //
                             rememberScope.launch {
-                                val resultSnackBar = snackBarHostState.snackbarHostState.showSnackbar(
+                                vm.getEvent(NoteleEvent.Delete(item))
+                                val resultSnackBar = snackBarHostState.showSnackbar(
                                     "Deseas recuperar? :",
-                                    "Deshacer"
+                                    "Deshacer",
                                 )
-                                if (resultSnackBar == SnackbarResult.ActionPerformed) {
+                                if (resultSnackBar == ActionPerformed) {
                                     vm.getEvent(NoteleEvent.RestoreNote)
                                 }
-                                Log.e("Borrador", "$resultSnackBar")
+                                Log.e("Borrador", "${vm.getEvent(NoteleEvent.RestoreNote)}")
                             }
                         }
                     )
@@ -165,17 +166,7 @@ fun ScreenHome(
     }
 }
 
-@Composable
-fun ListNotele(
-        item : NoteleModel,
-        onChangeList: List<NoteleModel>
-){
-    Column(
-        modifier = Modifier
-    ) {
 
-    }
-}
 
 
 

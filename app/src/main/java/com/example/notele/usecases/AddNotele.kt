@@ -9,6 +9,7 @@ class AddNotele(
     private val repository: NoteleRepository
 ) {
 
+    @Throws(MessageException::class)
     operator fun invoke(noteleModel: NoteleModel) {
         if (noteleModel.title.isBlank() && noteleModel.description.isBlank()){
             throw MessageException("Falta ingresar datos")

@@ -12,8 +12,7 @@ import javax.annotation.processing.Generated
 @Entity(tableName = "notele_table")
 data class NoteleModel(
 
-    @PrimaryKey
-    val idNotele: Int? = null,
+    @PrimaryKey val idNotele: Int? = null,
     val title: String,
     val description: String,
     val time: Long,
