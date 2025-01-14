@@ -52,11 +52,11 @@ class AddEditViewModel @Inject constructor(
                         currendId = notele.idNotele
                         _editTitle.value = editTitle.value.copy(
                             text = notele.title,
-                            isHintVisible = false
+                            isHintVisible = !_editTitle.value.isHintVisible
                         )
                         _editDescription.value = editDescription.value.copy(
                             text = notele.description,
-                            isHintVisible = false
+                            isHintVisible = !_editTitle.value.isHintVisible
                         )
                         _priorityColor.intValue = notele.color
                     }
@@ -78,7 +78,7 @@ class AddEditViewModel @Inject constructor(
             }
             is AddEditNotelesEvent.DescriptionChange -> {
                 _editDescription.value = editDescription.value.copy(
-                    isHintVisible = !event.valueChange.isFocused != _editDescription.value.text.isBlank()
+                    isHintVisible = !event.valueChange.isFocused && _editDescription.value.text.isBlank()
                 )
             }
             is AddEditNotelesEvent.Title -> {
@@ -88,7 +88,7 @@ class AddEditViewModel @Inject constructor(
             }
             is AddEditNotelesEvent.TitleChange -> {
                 _editTitle.value = editTitle.value.copy(
-                    isHintVisible = !event.valueChange.isFocused != _editTitle.value.text.isBlank()
+                    isHintVisible = !event.valueChange.isFocused && _editTitle.value.text.isBlank()
                 )
             }
             is AddEditNotelesEvent.OnSaveItem -> {
@@ -103,8 +103,8 @@ class AddEditViewModel @Inject constructor(
                                 idNotele = currendId
                             )
                         )
-                        Log.e("currendID:", "$currendId")
                         _stateEvent.emit(UiEvent.SaveNotele)
+                        Log.e("stateevent:", "${_stateEvent.emit(UiEvent.SaveNotele)}")
                     }catch (e: Exception){
                         _stateEvent.emit(UiEvent.ShowSnackBar(
                             e.message ?: "Ingrese los datos"

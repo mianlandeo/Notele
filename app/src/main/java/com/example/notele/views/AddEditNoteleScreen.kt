@@ -151,8 +151,8 @@ fun AddEditScreen(
                 hint = title.hint,
                 onValueText = { vm.onEvent(AddEditNotelesEvent.Title(it)) },
                 singleLine = true,
-                textStyle = MaterialTheme.typography.bodyMedium,
-                focusState = { vm.onEvent(AddEditNotelesEvent.TitleChange(it))},
+                textStyle = MaterialTheme.typography.labelSmall,
+                focusState = { vm.onEvent(AddEditNotelesEvent.TitleChange(it)) },
                 hintVisible = title.isHintVisible,
                 tag = Utils.TEST_TAG_TITLE
                 )
@@ -162,7 +162,7 @@ fun AddEditScreen(
                 hint = description.hint,
                 onValueText = { vm.onEvent(AddEditNotelesEvent.Description(it))},
                 singleLine = true,
-                textStyle = MaterialTheme.typography.bodySmall,
+                textStyle = MaterialTheme.typography.labelSmall,
                 focusState = { vm.onEvent(AddEditNotelesEvent.DescriptionChange(it))},
                 hintVisible = description.isHintVisible,
                 tag = Utils.TEST_TAG_DESCRIPTION

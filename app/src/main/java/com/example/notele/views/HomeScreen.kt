@@ -25,6 +25,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -55,12 +56,8 @@ fun ScreenHome(
     navController: NavController
 ) {
     val stateVm = vm.state.value
-    //Barra bocadillo + alcance de corrutina
-    //val snackBarHostState = rememberScaffoldState()
     val rememberScope = rememberCoroutineScope()
     val snackBarHostState = remember { SnackbarHostState() }
-
-
 
     Scaffold(
         floatingActionButton = {
@@ -92,7 +89,7 @@ fun ScreenHome(
                 verticalAlignment = Alignment.Top
             ) {
                 Text(
-                    text = "Titulo",
+                    text = "Notas",
                     style = MaterialTheme.typography.bodyLarge,
                     modifier = Modifier.padding(start = 12.dp),
                     fontSize = 40.sp,
@@ -131,6 +128,7 @@ fun ScreenHome(
                 .fillMaxSize()
                 .padding(12.dp)) {
                 items(items = stateVm.noteList) { item ->
+                    Log.e("aqui lista:", "${stateVm.noteList}")
                     ItemScreen(
                         modifier = Modifier
                             .fillMaxSize()
@@ -144,13 +142,13 @@ fun ScreenHome(
                         notele = item,
                         onDeleteClick = {
                             // Cada ves que se elimine una nota aparecera un snackBar
-                            // Donde podemos recuperar la nota eliminada
-                            //
+                            // Donde podemos recuperar la nota eliminada con la accion de deshacer
                             rememberScope.launch {
                                 vm.getEvent(NoteleEvent.Delete(item))
                                 val resultSnackBar = snackBarHostState.showSnackbar(
-                                    "Deseas recuperar? :",
-                                    "Deshacer",
+                                    message = "Deseas recuperar? :",
+                                    actionLabel = "Deshacer",
+                                    duration = SnackbarDuration.Short
                                 )
                                 if (resultSnackBar == ActionPerformed) {
                                     vm.getEvent(NoteleEvent.RestoreNote)
