@@ -125,5 +125,5 @@ class AddEditViewModel @Inject constructor(
 data class StateEditTextField(
     val text : String = "",
     val hint: String = "",
-    val isHintVisible: Boolean = true
+    val isHintVisible: Boolean = false
 )
