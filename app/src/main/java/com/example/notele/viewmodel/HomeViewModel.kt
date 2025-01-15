@@ -6,7 +6,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.notele.db.model.NoteleModel
-import com.example.notele.usecases.model.NoteleEvent
 import com.example.notele.usecases.model.ModelUsesCases
 import com.example.notele.usecases.model.NoteleOrder
 import com.example.notele.usecases.model.NoteleType
