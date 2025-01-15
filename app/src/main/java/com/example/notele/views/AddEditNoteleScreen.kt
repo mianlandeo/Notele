@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -26,6 +25,8 @@ import androidx.compose.material.icons.rounded.Done
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -62,6 +63,7 @@ fun AddEditScreen(
     val title = vm.editTitle.value
     val description = vm.editDescription.value
     val scope = rememberCoroutineScope()
+    val snackBarHostState = remember { SnackbarHostState() }
     val scaffold = rememberScaffoldState()
 
     val animateColor = remember {
@@ -74,7 +76,7 @@ fun AddEditScreen(
         vm.stateEvent.collectLatest { event ->
             when(event) {
                 is AddEditViewModel.UiEvent.ShowSnackBar -> {
-                    scaffold.snackbarHostState.showSnackbar(
+                    snackBarHostState.showSnackbar(
                         event.message
                     )
                 }
@@ -82,6 +84,7 @@ fun AddEditScreen(
                     navController.navigateUp()
                 }
             }
+            Log.e("eventevent:", "$event")
         }
     }
 
@@ -96,12 +99,13 @@ fun AddEditScreen(
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { vm.onEvent(AddEditNotelesEvent.OnSaveItem)},
+                onClick = { vm.onEvent(AddEditNotelesEvent.OnSaveItem) },
                 backgroundColor = Color.Black
             ) {
                 Icon(Icons.Rounded.Done, "Save", tint = Color.White)
             }
-        }
+        },
+        snackbarHost = { SnackbarHost(hostState = snackBarHostState) }
     ) { innerPadding ->
         Column(
             modifier = modifier

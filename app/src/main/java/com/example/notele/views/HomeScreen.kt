@@ -153,7 +153,6 @@ fun ScreenHome(
                                 if (resultSnackBar == ActionPerformed) {
                                     vm.getEvent(NoteleEvent.RestoreNote)
                                 }
-                                Log.e("Borrador", "${vm.getEvent(NoteleEvent.RestoreNote)}")
                             }
                         }
                     )

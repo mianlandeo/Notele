@@ -1,7 +1,6 @@
 package com.example.notele.viewmodel
 
 import android.util.Log
-import androidx.compose.runtime.MutableIntState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -14,7 +13,6 @@ import com.example.notele.usecases.model.ModelUsesCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -104,10 +102,9 @@ class AddEditViewModel @Inject constructor(
                             )
                         )
                         _stateEvent.emit(UiEvent.SaveNotele)
-                        Log.e("stateevent:", "${_stateEvent.emit(UiEvent.SaveNotele)}")
                     }catch (e: Exception){
                         _stateEvent.emit(UiEvent.ShowSnackBar(
-                            e.message ?: "Ingrese los datos"
+                            e.message ?: "Falta ingresar datos"
                         ))
                     }
                 }

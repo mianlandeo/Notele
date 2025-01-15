@@ -73,7 +73,7 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-    //Material design m2
+    //Material design m3
     implementation(libs.androidx.material)
     implementation(libs.material3)
 
@@ -92,4 +92,7 @@ dependencies {
 
     //Navigation compose
     implementation(libs.androidx.navigation.compose)
+
+    //SplashScreen
+    implementation(libs.androidx.core.splashscreen)
 }
