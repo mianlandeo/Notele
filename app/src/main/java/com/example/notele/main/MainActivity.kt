@@ -6,7 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -17,12 +17,22 @@ import com.example.notele.views.AddEditScreen
 import com.example.notele.views.ScreenHome
 import com.example.notele.views.navigation.DestinationScreen
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        val splashScreenNotele = installSplashScreen()
+        splashScreenNotele.setKeepOnScreenCondition{true}
+        CoroutineScope(Dispatchers.Main).launch {
+            delay(1000L)
+            splashScreenNotele.setKeepOnScreenCondition{false}
+        }
         setContent {
             NavigationScreen()
         }
