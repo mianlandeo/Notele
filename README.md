@@ -1,4 +1,4 @@
-                            **Notele App**
+  **Notele App**
 ________________________________________________________________________
 
 ## Application to create ➕, update 🔄, delete ❌ and selection color securely. Restore deleted last note with the snackbar action
