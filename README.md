@@ -1,17 +1,19 @@
-  **Notele App**
-________________________________________________________________________
+ # **Notele App**
 
-## Application to create ➕, update 🔄, delete ❌ and selection color securely. Restore deleted last note with the snackbar action
+### Application to create ➕, update 🔄, delete ❌ and selection color securely. Restore deleted last note with the snackbar action
 
 ### UI presentation
+________________________________________________________________________
 
-
+![alt text](https://github.com/mianlandeo/Notele/blob/main/previews/presentation.png)
 
 ### Feature 🤓
 * 100% Kotlin
-* Architecture MVVM
+* Architecture MVVM     
 * Clear code
 * Jetpack Compose
+
+![alt text](https://github.com/mianlandeo/Notele/blob/main/previews/preview.gif)
 
 ## technologic and library open code
 * Min SDK 28
@@ -23,7 +25,7 @@ ________________________________________________________________________
 * Room
 * Dagger hilt
 
-### Architecture
+### Clear Architecture
 
 ![](https://developer.android.com/static/topic/libraries/architecture/images/mad-arch-overview.png?hl=es-419)
 
