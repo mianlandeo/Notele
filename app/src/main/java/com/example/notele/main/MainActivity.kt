@@ -12,10 +12,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.notele.ui.theme.NoteleAppTheme
-import com.example.notele.views.AddEditScreen
-import com.example.notele.views.ScreenHome
-import com.example.notele.views.navigation.DestinationScreen
+import com.example.notele.presentation.theme.NoteleAppTheme
+import com.example.notele.presentation.views.AddEditScreen
+import com.example.notele.presentation.views.ScreenHome
+import com.example.notele.presentation.views.navigation.DestinationScreen
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

@@ -5,6 +5,5 @@
 
         <item name="android:windowSplashScreenBackground" >#FF000000</item>
         <item name="android:windowSplashScreenAnimatedIcon">@drawable/log_notele</item>
-        <item name="android:windowSplashScreenAnimationDuration">2000</item>
     </style>
 </resources>
