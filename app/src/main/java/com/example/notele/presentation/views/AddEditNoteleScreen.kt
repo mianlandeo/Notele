@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -19,12 +18,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Done
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -100,7 +99,8 @@ fun AddEditScreen(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = { vm.onEvent(AddEditNotelesEvent.OnSaveItem) },
-                backgroundColor = Color.Black
+                contentColor = MaterialTheme.colorScheme.primary,
+                elevation = androidx.compose.material3.FloatingActionButtonDefaults.elevation(12.dp)
             ) {
                 Icon(Icons.Rounded.Done, "Save", tint = Color.White)
             }
@@ -119,8 +119,7 @@ fun AddEditScreen(
                     .padding(8.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ){
-                /*Damos una accion por cada color que haya sido seleccionamos por el usuario
-                 y lo visualizamos como un background */
+                /* action for each color is what user selection */
                 NoteleModel.notelePriority.forEach { color ->
                     val colorInt = color.toArgb()
                     Box(

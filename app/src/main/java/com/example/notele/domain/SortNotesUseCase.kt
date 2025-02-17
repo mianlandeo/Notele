@@ -7,7 +7,7 @@ import com.example.notele.domain.model.NoteleType
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-class GetMapUseCase(
+class SortNotesUseCase(
     private val repository: NoteleRepository
 ) {
     operator fun invoke(

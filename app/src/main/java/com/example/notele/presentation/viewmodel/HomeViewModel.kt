@@ -21,18 +21,17 @@ class HomeViewModel @Inject constructor(
     private val useCases: ModelUsesCases
 ): ViewModel() {
 
-    /*Estado actual de la lista*/
+    /*current status of the List*/
     private val _state = mutableStateOf(NoteleState())
     val state : State<NoteleState> = _state
 
-    //Variable que almacena el eliminado temporalmente
+    /*store the value delete */
     private var recentlyDeleteNotele : NoteleModel? = null
     private var getNoteleJob : Job? = null
 
     init {
-        //Inicializamos la lista en fecha descendente por defecto
+        /*Initialize list in date Descending*/
         getListNote(NoteleOrder.Date(NoteleType.Descending))
-        Log.e("estado", "${state.value}")
     }
 
     fun getEvent(noteleEvent: NoteleEvent){
@@ -66,7 +65,7 @@ class HomeViewModel @Inject constructor(
 
     private fun getListNote(noteleOrder: NoteleOrder){
         getNoteleJob?.cancel()
-        getNoteleJob = useCases.getMapUseCase(noteleOrder)
+        getNoteleJob = useCases.sortNotesUseCase(noteleOrder)
             .onEach { notes -> //Almacena en cache
                 _state.value = _state.value.copy(
                     noteList = notes,

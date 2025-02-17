@@ -25,33 +25,32 @@ class AddEditViewModel @Inject constructor(
     private val _editTitle = mutableStateOf(
         StateEditTextField(
         hint = "Ingrese Titulo"
-    )
+        )
     )
     val editTitle : State<StateEditTextField> = _editTitle
 
     private val _editDescription = mutableStateOf(
         StateEditTextField(
         hint = "Ingrese Descripción"
-    )
+        )
     )
     val editDescription : State<StateEditTextField> = _editDescription
 
-    /*Inicializa con un color predeterminado al abrir el estado*/
-    /**/
+    /*Initialize with a color default*/
     private val _priorityColor = mutableIntStateOf(NoteleModel.notelePriority.random().toArgb())
     val priorityColor : State<Int> = _priorityColor
 
     private val _stateEvent = MutableSharedFlow<UiEvent>()
     val stateEvent = _stateEvent.asSharedFlow()
 
-    private var currendId : Int? = null
+    private var currentId : Int? = null
 
     init {
         savedStateHandle.get<Int>("idNotele")?.let { noteleId ->
             if (noteleId != -1) {
                 viewModelScope.launch(Dispatchers.IO) {
                     usesCases.getIdNote(noteleId)?.also { notele ->
-                        currendId = notele.idNotele
+                        currentId = notele.idNotele
                         _editTitle.value = editTitle.value.copy(
                             text = notele.title,
                             isHintVisible = !_editTitle.value.isHintVisible
@@ -67,7 +66,7 @@ class AddEditViewModel @Inject constructor(
         }
     }
 
-    /*Recompone los componente segun lo seleccionado por el usuario su estado cambia*/
+    /**/
     fun onEvent(event : AddEditNotelesEvent){
         when(event) {
             is AddEditNotelesEvent.Color -> {
@@ -101,8 +100,9 @@ class AddEditViewModel @Inject constructor(
                                 title = editTitle.value.text,
                                 description = editDescription.value.text,
                                 color = priorityColor.value,
-                                time = System.currentTimeMillis(),
-                                idNotele = currendId
+                                time = System.nanoTime(),
+                                //time = SimpleDateFormat(),
+                                idNotele = currentId
                             )
                         )
                         _stateEvent.emit(UiEvent.SaveNotele)
@@ -117,7 +117,6 @@ class AddEditViewModel @Inject constructor(
             }
         }
     }
-
 
     sealed class UiEvent {
         data class ShowSnackBar(val message: String): UiEvent()

@@ -8,7 +8,7 @@ import com.example.notele.data.repository.NoteleRepositoryImpl
 import com.example.notele.domain.usecases.AddNotele
 import com.example.notele.domain.usecases.DeleteNotele
 import com.example.notele.domain.usecases.GetIdNote
-import com.example.notele.domain.GetMapUseCase
+import com.example.notele.domain.SortNotesUseCase
 import com.example.notele.domain.model.ModelUsesCases
 import dagger.Module
 import dagger.Provides
@@ -42,7 +42,7 @@ object Module {
     @Provides
     fun getUsesCases(repository: NoteleRepository): ModelUsesCases{
         return ModelUsesCases(
-            getMapUseCase = GetMapUseCase(repository),
+            sortNotesUseCase = SortNotesUseCase(repository),
             deleteNotele = DeleteNotele(repository),
             addNotele = AddNotele(repository),
             getIdNote = GetIdNote(repository)

@@ -2,9 +2,7 @@ package com.example.notele.data.repository
 
 import com.example.notele.data.db.dao.NoteleDao
 import com.example.notele.data.db.model.NoteleModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class NoteleRepositoryImpl @Inject constructor(

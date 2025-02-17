@@ -7,7 +7,6 @@ import com.example.notele.presentation.theme.LightGreen
 import com.example.notele.presentation.theme.RedOrange
 import com.example.notele.presentation.theme.RedPink
 import com.example.notele.presentation.theme.Violet
-import javax.annotation.processing.Generated
 
 @Entity(tableName = "notele_table")
 data class NoteleModel(
